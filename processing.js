@@ -1762,7 +1762,8 @@
                             "  src: url('data:application/x-font-ttf;base64,"+generateTinyFont()+"')\n" +
                             "       format('truetype');\n" +
                             "}";
-      document.head.appendChild(fontface);
+      var dochead = document.head || document.getElementsByTagName( "head" )[0] || document.documentElement;
+      dochead.appendChild(fontface);
 
       // set up the template element
       var element = document.createElement("span");
@@ -1833,7 +1834,8 @@
       var style = document.createElement("style");
       style.setAttribute("type","text/css");
       style.innerHTML = "@font-face{\n  font-family: '" + fontName + "';\n  src:  url('" + fontUrl + "');\n}\n";
-      document.head.appendChild(style);
+      var dochead = document.head || document.getElementsByTagName( "head" )[0] || document.documentElement;
+      dochead.appendChild(style);
       this.addedList[fontName] = true;
 
       // also create the element to load and compare the new font
