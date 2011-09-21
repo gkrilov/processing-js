@@ -19750,7 +19750,7 @@
    */
   var init = function() {
   
-     if (document.removeEventListner) {
+     if (document.removeEventListener) {
 		document.removeEventListener('DOMContentLoaded', init, false);
 	  }
 	  //else {
@@ -19832,9 +19832,9 @@
    */
   Processing.disableInit = function() {
     if(isDOMPresent) {
-	  if (document.removeEventListner) {
+	   if (document.removeEventListener) {
 		document.removeEventListener('DOMContentLoaded', init, false);
-	  }
+	   }
 	  //else {
 	  //document.detachEvent("onload", fn); - or something similar.. need closest equivalent to DOMContentLoaded for IE8
 	  //}
@@ -19845,7 +19845,7 @@
   if(isDOMPresent) {
     window['Processing'] = Processing;
 //#if PARSER
-    if (document.addEventListner) {
+    if (document.addEventListener) {
 		document.addEventListener('DOMContentLoaded', init, false);
 	}
 	//else {
