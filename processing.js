@@ -11793,19 +11793,19 @@
      */
 
     Drawing2D.prototype.smooth = curElement.style.setProperty ? function() {
-renderSmooth = true;
-curElement.style.setProperty("image-rendering", "optimizeQuality", "important");
-curElement.style.setProperty("-ms-interpolation-mode", "bicubic", "important");
-if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
-curContext.mozImageSmoothingEnabled = true;
-}
-} : function() {
-renderSmooth = true;
-curElement.setAttribute("style" , "image-rendering: optimizeQuality !important");
-curElement.setAttribute("style" , "-ms-interpolation-mode bicubic important");
-if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
-curContext.mozImageSmoothingEnabled = true;
-	    }
+       renderSmooth = true;
+       curElement.style.setProperty("image-rendering", "optimizeQuality", "important");
+       curElement.style.setProperty("-ms-interpolation-mode", "bicubic", "important");
+       if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
+       curContext.mozImageSmoothingEnabled = true;
+       }
+    } : function() {
+       renderSmooth = true;
+       curElement.setAttribute("style" , "image-rendering: optimizeQuality !important");
+       curElement.setAttribute("style" , "-ms-interpolation-mode bicubic important");
+       if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
+       curContext.mozImageSmoothingEnabled = true;
+	   }
 	};
 	
     
