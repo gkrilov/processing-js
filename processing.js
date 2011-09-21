@@ -11796,7 +11796,6 @@
         renderSmooth = true;
         curElement.style.setProperty("image-rendering", "optimizeQuality", "important");
 	    curElement.style.setProperty("-ms-interpolation-mode", "bicubic", "important");
-	     
         if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
           curContext.mozImageSmoothingEnabled = true;
         }
@@ -11827,9 +11826,8 @@
 	    curElement.style.setProperty("-ms-interpolation-mode", "nearest-neighbor", "important");
         if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
           curContext.mozImageSmoothingEnabled = false;
-      }
+        }
     } : function() {
-	
 	    renderSmooth = false;
 		curElement.setAttribute("style" , "image-rendering optimizeSpeed !important");
         curElement.setAttribute("style" , "image-rendering -moz-crisp-edges !important");
