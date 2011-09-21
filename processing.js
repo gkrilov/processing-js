@@ -11793,18 +11793,18 @@
      */
 
     Drawing2D.prototype.smooth = curElement.style.setProperty ? function() {
-        renderSmooth = true;
-        curElement.style.setProperty("image-rendering", "optimizeQuality", "important");
-	    curElement.style.setProperty("-ms-interpolation-mode", "bicubic", "important");
-        if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
-          curContext.mozImageSmoothingEnabled = true;
-        }
-    } : function() {
-	    renderSmooth = true;
-	    curElement.setAttribute("style" , "image-rendering: optimizeQuality !important");
-	    curElement.setAttribute("style" , "-ms-interpolation-mode bicubic important");
-        if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
-        curContext.mozImageSmoothingEnabled = true;
+renderSmooth = true;
+curElement.style.setProperty("image-rendering", "optimizeQuality", "important");
+curElement.style.setProperty("-ms-interpolation-mode", "bicubic", "important");
+if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
+curContext.mozImageSmoothingEnabled = true;
+}
+} : function() {
+renderSmooth = true;
+curElement.setAttribute("style" , "image-rendering: optimizeQuality !important");
+curElement.setAttribute("style" , "-ms-interpolation-mode bicubic important");
+if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
+curContext.mozImageSmoothingEnabled = true;
 	    }
 	};
 	
@@ -19749,7 +19749,14 @@
    * Automatic initialization function.
    */
   var init = function() {
-    document.removeEventListener('DOMContentLoaded', init, false);
+  
+     if (document.removeEventListner) {
+		document.removeEventListener('DOMContentLoaded', init, false);
+	  }
+	  //else {
+	  //document.detachEvent("onload", fn); - or something similar.. need closest equivalent to DOMContentLoaded for IE8
+	  //}
+   
 
     var canvas = document.getElementsByTagName('canvas'),
       filenames;
@@ -19825,7 +19832,12 @@
    */
   Processing.disableInit = function() {
     if(isDOMPresent) {
-      document.removeEventListener('DOMContentLoaded', init, false);
+	  if (document.removeEventListner) {
+		document.removeEventListener('DOMContentLoaded', init, false);
+	  }
+	  //else {
+	  //document.detachEvent("onload", fn); - or something similar.. need closest equivalent to DOMContentLoaded for IE8
+	  //}
     }
   };
 //#endif
@@ -19833,7 +19845,12 @@
   if(isDOMPresent) {
     window['Processing'] = Processing;
 //#if PARSER
-    document.addEventListener('DOMContentLoaded', init, false);
+    if (document.addEventListner) {
+		document.addEventListener('DOMContentLoaded', init, false);
+	}
+	//else {
+    //document.attachEvent("onload", fn); - or something similar.. need closest equivalent to DOMContentLoaded for IE8
+    //}
 //#endif
   } else {
     // DOM is not found
