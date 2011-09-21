@@ -11792,17 +11792,25 @@
      * @see #size()
      */
 
-    Drawing2D.prototype.smooth = function() {
-      renderSmooth = true;
-      var style = curElement.style;
-      style.setProperty("image-rendering", "optimizeQuality", "important");
-      style.setProperty("-ms-interpolation-mode", "bicubic", "important");
-      if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
+    Drawing2D.prototype.smooth = curElement.style.setProperty ? function() {
+        renderSmooth = true;
+        curElement.style.setProperty("image-rendering", "optimizeQuality", "important");
+	    curElement.style.setProperty("-ms-interpolation-mode", "bicubic", "important");
+	     
+        if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
+          curContext.mozImageSmoothingEnabled = true;
+        }
+    } : function() {
+	    renderSmooth = true;
+	    curElement.setAttribute("style" , "image-rendering: optimizeQuality !important");
+	    curElement.setAttribute("style" , "-ms-interpolation-mode bicubic important");
+        if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
         curContext.mozImageSmoothingEnabled = true;
-      }
-    };
-
-    Drawing3D.prototype.smooth = nop;
+	    }
+	};
+	
+    
+	Drawing3D.prototype.smooth = nop;
 
     /**
      * The noSmooth() function draws all geometry with jagged (aliased) edges.
@@ -11810,18 +11818,29 @@
      * @see #smooth()
      */
 
-    Drawing2D.prototype.noSmooth = function() {
-      renderSmooth = false;
-      var style = curElement.style;
-      style.setProperty("image-rendering", "optimizeSpeed", "important");
-      style.setProperty("image-rendering", "-moz-crisp-edges", "important");
-      style.setProperty("image-rendering", "-webkit-optimize-contrast", "important");
-      style.setProperty("image-rendering", "optimize-contrast", "important");
-      style.setProperty("-ms-interpolation-mode", "nearest-neighbor", "important");
-      if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
-        curContext.mozImageSmoothingEnabled = false;
+    Drawing2D.prototype.noSmooth = curElement.style.setProperty ? function() {
+        renderSmooth = false;
+        curElement.style.setProperty("image-rendering", "optimizeSpeed", "important");
+        curElement.style.setProperty("image-rendering", "-moz-crisp-edges", "important");
+	    curElement.style.setProperty("image-rendering", "-webkit-optimize-contrast", "important");
+	    curElement.style.setProperty("image-rendering", "optimize-contrast", "important");
+	    curElement.style.setProperty("-ms-interpolation-mode", "nearest-neighbor", "important");
+        if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
+          curContext.mozImageSmoothingEnabled = false;
       }
+    } : function() {
+	
+	    renderSmooth = false;
+		curElement.setAttribute("style" , "image-rendering optimizeSpeed !important");
+        curElement.setAttribute("style" , "image-rendering -moz-crisp-edges !important");
+        curElement.setAttribute("style" , "image-rendering -webkit-optimize-contrast !important");
+        curElement.setAttribute("style" , "image-rendering optimize-contrast !important");
+        curElement.setAttribute("style" , "-ms-interpolation-mode nearest-neighbor !important");
+		if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
+          curContext.mozImageSmoothingEnabled = false;
+		}
     };
+	  
 
     Drawing3D.prototype.noSmooth = nop;
 
