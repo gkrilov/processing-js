@@ -19748,9 +19748,8 @@
 	  document.removeEventListener('DOMContentLoaded', init, false);
 	}
 	else {
-	  document.detachEvent("onreadystatechange", init); 
+	  document.detachEvent("onreadystatechange", init);
 	}
-	
     var canvas = document.getElementsByTagName('canvas'),
       filenames;
 
@@ -19825,12 +19824,12 @@
    */
   Processing.disableInit = function() {
     if(isDOMPresent) {
-	   if (document.removeEventListener) {
-		document.removeEventListener('DOMContentLoaded', init, false);
-	   }
-	   else {
-	    document.detachEvent("onreadystatechange", init);
-	   }
+	  if (document.removeEventListener) {
+        document.removeEventListener('DOMContentLoaded', init, false);
+	  }
+      else if (document.detachEvent) {
+        document.detachEvent("onreadystatechange", init);
+      }  
     }
   };
 //#endif
@@ -19841,12 +19840,13 @@
     if (document.addEventListener) {
 		document.addEventListener('DOMContentLoaded', init, false);
 	}
-	else if (document.attachEvent) {
+    else if (document.attachEvent) {
       document.attachEvent("onreadystatechange", function () {  
         if (document.readyState == "complete") {  
           init();  
-		}
-    }  
+        }  
+      });  
+    }
 //#endif
   } else {
     // DOM is not found
