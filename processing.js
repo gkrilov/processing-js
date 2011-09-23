@@ -11807,10 +11807,7 @@
          curContext.mozImageSmoothingEnabled = true;
        }
     };
-	
-    
 	Drawing3D.prototype.smooth = nop;
-
     /**
      * The noSmooth() function draws all geometry with jagged (aliased) edges.
      *
@@ -11838,10 +11835,7 @@
          curContext.mozImageSmoothingEnabled = false;
        }
     };
-	  
-
     Drawing3D.prototype.noSmooth = nop;
-
     ////////////////////////////////////////////////////////////////////////////
     // Vector drawing functions
     ////////////////////////////////////////////////////////////////////////////
@@ -19750,14 +19744,13 @@
    */
   var init = function() {
   
-     if (document.removeEventListener) {
-		document.removeEventListener('DOMContentLoaded', init, false);
-	  }
-	  //else {
-	  //document.detachEvent("onload", fn); - or something similar.. need closest equivalent to DOMContentLoaded for IE8
-	  //}
-   
-
+    if (document.removeEventListener) {
+	  document.removeEventListener('DOMContentLoaded', init, false);
+	}
+	else {
+	  document.detachEvent("onreadystatechange", init); 
+	}
+	
     var canvas = document.getElementsByTagName('canvas'),
       filenames;
 
@@ -19835,9 +19828,9 @@
 	   if (document.removeEventListener) {
 		document.removeEventListener('DOMContentLoaded', init, false);
 	   }
-	  //else {
-	  //document.detachEvent("onload", fn); - or something similar.. need closest equivalent to DOMContentLoaded for IE8
-	  //}
+	   else {
+	    document.detachEvent("onreadystatechange", init);
+	   }
     }
   };
 //#endif
@@ -19848,9 +19841,12 @@
     if (document.addEventListener) {
 		document.addEventListener('DOMContentLoaded', init, false);
 	}
-	//else {
-    //document.attachEvent("onload", fn); - or something similar.. need closest equivalent to DOMContentLoaded for IE8
-    //}
+	else if (document.attachEvent) {
+      document.attachEvent("onreadystatechange", function () {  
+        if (document.readyState == "complete") {  
+          init();  
+		}
+    }  
 //#endif
   } else {
     // DOM is not found
