@@ -26,6 +26,13 @@
   };
 
   var isDOMPresent = ("document" in this) && !("fake" in this.document);
+  
+  // Check if browser is IE8 and if call initElement on the dynamically created canvas.
+  var initializeCanvasIfIE8 = function(canvas) {
+    if ( !document.createElement('canvas').getContext && typeof(G_vmlCanvasManager) != "undefined" ) {
+      G_vmlCanvasManager.initElement(canvas);
+    }
+  };  
 
   // Typed Arrays: fallback to WebGL arrays or Native JS arrays if unavailable
   function setupTypedArray(name, fallback) {
@@ -1546,7 +1553,8 @@
   function computeFontMetrics(pfont) {
     var emQuad = 250,
         correctionFactor = pfont.size / emQuad,
-        canvas = document.createElement("canvas");
+        canvas = document.createElement("canvas");	
+    initializeCanvasIfIE8(canvas);
     canvas.width = 2*emQuad;
     canvas.height = 2*emQuad;
     canvas.style.opacity = 0;
@@ -1867,6 +1875,7 @@
 
     if (pgraphicsMode) {
       curElement = document.createElement("canvas");
+      initializeCanvasIfIE8(curElement);
     } else {
       // We'll take a canvas element or a string for a canvas element's id
       curElement = typeof aCanvas === "string" ? document.getElementById(aCanvas) : aCanvas;
@@ -8398,8 +8407,9 @@
       y = y !== undef ? y : 0;
       w = w !== undef ? w : p.width;
       h = h !== undef ? h : p.height;
-      var c = document.createElement("canvas"),
-          ctx = c.getContext("2d"),
+      var c = document.createElement("canvas");
+      initializeCanvasIfIE8(c);
+      var ctx = c.getContext("2d"),
           obj = ctx.createImageData(w, h),
           uBuff = new Uint8Array(w * h * 4);
       curContext.readPixels(x, y, w, h, curContext.RGBA, curContext.UNSIGNED_BYTE, uBuff);
@@ -11807,13 +11817,12 @@
          curContext.mozImageSmoothingEnabled = true;
        }
     };
-	Drawing3D.prototype.smooth = nop;
+    Drawing3D.prototype.smooth = nop;
     /**
      * The noSmooth() function draws all geometry with jagged (aliased) edges.
      *
      * @see #smooth()
      */
-
     Drawing2D.prototype.noSmooth = curElement.style.setProperty ? function() {
        renderSmooth = false;
        curElement.style.setProperty("image-rendering", "optimizeSpeed", "important");
@@ -14104,7 +14113,9 @@
       p.save(frameFilename);
     };
 
-    var utilityContext2d = document.createElement("canvas").getContext("2d");
+	var aCanvas = document.createElement("canvas");
+    initializeCanvasIfIE8(aCanvas);
+    var utilityContext2d = aCanvas.getContext("2d");
 
     var canvasDataCache = [undef, undef, undef]; // we need three for now
 
@@ -14114,6 +14125,7 @@
       if (canvasData === undef) {
         canvasData = {};
         canvasData.canvas = document.createElement("canvas");
+        initializeCanvasIfIE8(canvasData.canvas);
         canvasData.context = canvasData.canvas.getContext('2d');
       }
 
@@ -14266,6 +14278,7 @@
 
         // Stuff a canvas into sourceImg so image() calls can use drawImage like an <img>
         var canvas = this.sourceImg = document.createElement("canvas");
+        initializeCanvasIfIE8(canvas);
         canvas.width = this.width;
         canvas.height = this.height;
 
@@ -16282,6 +16295,7 @@
       var i, linesCount = lines.length;
       if (textcanvas === undef) {
         textcanvas = document.createElement("canvas");
+        initializeCanvasIfIE8(textcanvas);
       }
 
       var textContext = textcanvas.getContext("2d");
@@ -16454,6 +16468,7 @@
       // handle case for 3d text
       if (textcanvas === undef) {
         textcanvas = document.createElement("canvas");
+        initializeCanvasIfIE8(textcanvas);
       }
       var oldContext = curContext;
       curContext = textcanvas.getContext("2d");
