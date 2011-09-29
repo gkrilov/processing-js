@@ -26,7 +26,14 @@
   };
 
   var isDOMPresent = ("document" in this) && !("fake" in this.document);
-
+  
+  // Check if browser is IE8 and if call initElement on the dynamically created canvas.
+  var initializeCanvasIfIE8 = function(canvas) {
+    if ( !document.createElement('canvas').getContext && typeof(G_vmlCanvasManager) != "undefined" ) {
+      G_vmlCanvasManager.initElement(canvas);
+    }
+  };  
+  
   // Typed Arrays: fallback to WebGL arrays or Native JS arrays if unavailable
   function setupTypedArray(name, fallback) {
     // Check if TypedArray exists, and use if so.
@@ -1203,7 +1210,8 @@
 
   defaultScope.defineProperty = function(obj, name, desc) {
     if("defineProperty" in Object) {
-      Object.defineProperty(obj, name, desc);
+      try { Object.defineProperty(obj, name, desc); } 
+	  catch (e) {alert(e);}
     } else {
       if (desc.hasOwnProperty("get")) {
         obj.__defineGetter__(name, desc.get);
@@ -1480,7 +1488,8 @@
     var pgraphicsMode = (arguments.length === 0);
     if (pgraphicsMode) {
       curElement = document.createElement("canvas");
-    }
+	  initializeCanvasIfIE8(curElement);
+	  }
 
     // PJS specific (non-p5) methods and properties to externalize
     p.externals = {
@@ -11230,9 +11239,11 @@
      * @see #hint()
      * @see #size()
      */
-    DrawingShared.prototype.smooth = function() {
-      curElement.style.setProperty("image-rendering", "optimizeQuality", "important");
-    };
+    DrawingShared.prototype.smooth = curElement.style.setProperty ? function() {
+        curElement.style.setProperty("image-rendering", "optimizeQuality", "important");
+      } : function() {
+	    curElement.setAttribute("style" , "image-rendering: optimizeQuality !important");
+	  };
 
     Drawing2D.prototype.smooth = function() {
       DrawingShared.prototype.smooth.apply(this, arguments);
@@ -11246,9 +11257,11 @@
      *
      * @see #smooth()
      */
-    DrawingShared.prototype.noSmooth = function() {
+    DrawingShared.prototype.noSmooth = curElement.style.setProperty ? function() {
       curElement.style.setProperty("image-rendering", "optimizeSpeed", "important");
-    };
+    } : function() {
+	  curElement.setAttribute("style" , "image-rendering optimizeSpeed !important");
+	};
 
     Drawing2D.prototype.noSmooth = function() {
       DrawingShared.prototype.noSmooth.apply(this, arguments);
@@ -13474,7 +13487,9 @@
       p.save(frameFilename);
     };
 
-    var utilityContext2d = document.createElement("canvas").getContext("2d");
+	var aCanvas = document.createElement("canvas");
+    initializeCanvasIfIE8(aCanvas);	
+    var utilityContext2d = aCanvas.getContext("2d");
 
     var canvasDataCache = [undef, undef, undef]; // we need three for now
 
@@ -19440,7 +19455,12 @@
    * Automatic initialization function.
    */
   var init = function() {
-    document.removeEventListener('DOMContentLoaded', init, false);
+	  if (document.removeEventListener) {
+        document.removeEventListener('DOMContentLoaded', init, false);
+	  }
+      else if (document.detachEvent) {
+        document.detachEvent("onreadystatechange", init);
+      }  
 
     var canvas = document.getElementsByTagName('canvas'),
       filenames;
@@ -19516,7 +19536,12 @@
    */
   Processing.disableInit = function() {
     if(isDOMPresent) {
-      document.removeEventListener('DOMContentLoaded', init, false);
+	  if (document.removeEventListener) {
+        document.removeEventListener('DOMContentLoaded', init, false);
+	  }
+      else if (document.detachEvent) {
+        document.detachEvent("onreadystatechange", init);
+      }  
     }
   };
 //#endif
@@ -19524,7 +19549,16 @@
   if(isDOMPresent) {
     window['Processing'] = Processing;
 //#if PARSER
-    document.addEventListener('DOMContentLoaded', init, false);
+    if (document.addEventListener) {
+		document.addEventListener('DOMContentLoaded', init, false);
+	}
+    else if (document.attachEvent) {
+      document.attachEvent("onreadystatechange", function () {  
+        if (document.readyState == "complete") {  
+          init();  
+        }  
+      });  
+    }
 //#endif
   } else {
     // DOM is not found
