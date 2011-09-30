@@ -1210,8 +1210,7 @@
 
   defaultScope.defineProperty = function(obj, name, desc) {
     if("defineProperty" in Object) {
-      try { Object.defineProperty(obj, name, desc); } 
-	  catch (e) {alert(e);}
+      Object.defineProperty(obj, name, desc); 
     } else {
       if (desc.hasOwnProperty("get")) {
         obj.__defineGetter__(name, desc.get);
@@ -13487,9 +13486,9 @@
       p.save(frameFilename);
     };
 
-	var aCanvas = document.createElement("canvas");
-    initializeCanvasIfIE8(aCanvas);	
-    var utilityContext2d = aCanvas.getContext("2d");
+	var jCanvas = document.createElement("canvas");
+    initializeCanvasIfIE8(jCanvas);	
+    var utilityContext2d = jCanvas.getContext("2d");
 
     var canvasDataCache = [undef, undef, undef]; // we need three for now
 
@@ -13499,6 +13498,7 @@
       if (canvasData === undef) {
         canvasData = {};
         canvasData.canvas = document.createElement("canvas");
+		initializeCanvasIfIE8(canvasData.canvas);
         canvasData.context = canvasData.canvas.getContext('2d');
       }
 
@@ -15789,6 +15789,7 @@
       var i, linesCount = lines.length;
       if (textcanvas === undef) {
         textcanvas = document.createElement("canvas");
+		initializeCanvasIfIE8(textcanvas);
       }
 
       var textContext = textcanvas.getContext("2d");
@@ -16092,6 +16093,7 @@
       // handle case for 3d text
       if (textcanvas === undef) {
         textcanvas = document.createElement("canvas");
+		initializeCanvasIfIE8(textcanvas);
       }
       var oldContext = curContext;
       curContext = textcanvas.getContext("2d");
@@ -17223,6 +17225,7 @@
         if (render === PConstants.WEBGL) {
           p.toImageData = function() { // 3D
             var c = document.createElement("canvas");
+			initializeCanvasIfIE8(c);
             var ctx = c.getContext("2d");
             var obj = ctx.createImageData(this.width, this.height);
             var uBuff = new Uint8Array(this.width * this.height * 4);
@@ -19343,7 +19346,7 @@
       if(typeof this.attachFunction === "function") {
         this.attachFunction(processing);
       } else if(this.sourceCode) {
-        var func = ((new Function("return (" + this.sourceCode + ");"))());
+        var func = ( (new Function("return (" + this.sourceCode + ");"))() );
         func(processing);
         this.attachFunction = func;
       } else {
