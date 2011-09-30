@@ -11239,10 +11239,10 @@
      * @see #size()
      */
     DrawingShared.prototype.smooth = curElement.style.setProperty ? function() {
-        curElement.style.setProperty("image-rendering", "optimizeQuality", "important");
-      } : function() {
-	    curElement.setAttribute("style" , "image-rendering: optimizeQuality !important");
-	  };
+      curElement.style.setProperty("image-rendering", "optimizeQuality", "important");
+    } : function() {
+      curElement.setAttribute("style" , "image-rendering: optimizeQuality !important");
+    };
 
     Drawing2D.prototype.smooth = function() {
       DrawingShared.prototype.smooth.apply(this, arguments);
@@ -11259,8 +11259,8 @@
     DrawingShared.prototype.noSmooth = curElement.style.setProperty ? function() {
       curElement.style.setProperty("image-rendering", "optimizeSpeed", "important");
     } : function() {
-	  curElement.setAttribute("style" , "image-rendering optimizeSpeed !important");
-	};
+      curElement.setAttribute("style" , "image-rendering optimizeSpeed !important");
+    };
 
     Drawing2D.prototype.noSmooth = function() {
       DrawingShared.prototype.noSmooth.apply(this, arguments);
@@ -19112,8 +19112,8 @@
 
               observer(resizer, "dblclick", function(evt) {
                 if ( evt.preventDefault ) { 
-				  evt.preventDefault(); 
-				} else { evt.returnValue = false; }
+                  evt.preventDefault(); 
+                } else { evt.returnValue = false; }
 
                 if (previousHeight) {
                   setContainerHeight(previousHeight);
@@ -19126,8 +19126,8 @@
 
               observer(resizer, "mousedown", function(evt) {
                 if ( evt.preventDefault ) { 
-				  evt.preventDefault(); 
-				} else { evt.returnValue = false; }
+                  evt.preventDefault(); 
+                } else { evt.returnValue = false; }
                 resizingLog = True;
                 previousScrollTop = output.scrollTop;
               }),
