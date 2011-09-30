@@ -16793,7 +16793,9 @@
 
         attachEventHandler(curElement, "touchmove", function(t) {
           if (p.touchMove !== undef) {
-            t.preventDefault(); // Stop the viewport from scrolling
+            if ( r.preventDefault ) { 
+		      r.preventDefault(); 
+			} else { r.returnValue = false; } // Stop the viewport from scrolling
             t = addTouchEventOffset(t);
             p.touchMove(t);
           }
@@ -19109,7 +19111,9 @@
               }),
 
               observer(resizer, "dblclick", function(evt) {
-                evt.preventDefault();
+                if ( evt.preventDefault ) { 
+				  evt.preventDefault(); 
+				} else { evt.returnValue = false; }
 
                 if (previousHeight) {
                   setContainerHeight(previousHeight);
@@ -19121,7 +19125,9 @@
               }),
 
               observer(resizer, "mousedown", function(evt) {
-                evt.preventDefault();
+                if ( evt.preventDefault ) { 
+				  evt.preventDefault(); 
+				} else { evt.returnValue = false; }
                 resizingLog = True;
                 previousScrollTop = output.scrollTop;
               }),
