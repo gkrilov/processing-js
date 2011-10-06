@@ -11239,10 +11239,10 @@
      * @see #size()
      */
     DrawingShared.prototype.smooth = curElement.style.setProperty ? function() {
-      curElement.style.setProperty("image-rendering", "optimizeQuality", "important");
-    } : function() {
-      curElement.setAttribute("style" , "image-rendering: optimizeQuality !important");
-    };
+        curElement.style.setProperty("image-rendering", "optimizeQuality", "important");
+      } : function() {
+	    curElement.setAttribute("style" , "image-rendering: optimizeQuality !important");
+	  };
 
     Drawing2D.prototype.smooth = function() {
       DrawingShared.prototype.smooth.apply(this, arguments);
@@ -11259,8 +11259,8 @@
     DrawingShared.prototype.noSmooth = curElement.style.setProperty ? function() {
       curElement.style.setProperty("image-rendering", "optimizeSpeed", "important");
     } : function() {
-      curElement.setAttribute("style" , "image-rendering optimizeSpeed !important");
-    };
+	  curElement.setAttribute("style" , "image-rendering optimizeSpeed !important");
+	};
 
     Drawing2D.prototype.noSmooth = function() {
       DrawingShared.prototype.noSmooth.apply(this, arguments);
@@ -17777,6 +17777,7 @@
     }
 
     function expandExpression(expr) {
+	  // console.log(expr);
       if(expr.charAt(0) === '(' || expr.charAt(0) === '[') {
         return expr.charAt(0) + expandExpression(expr.substring(1, expr.length - 1)) + expr.charAt(expr.length - 1);
       } else if(expr.charAt(0) === '{') {
@@ -18954,7 +18955,7 @@
     } else if (typeof document !== undef && !document.fake) {
       (function() {
         // DOM document
-        var doc = document,
+        var doc = window.document,
 
         $div = "div",
         $style = "style",
@@ -19084,7 +19085,7 @@
             setContainerHeight = function(height) {
               var viewHeight = view.innerHeight,
                 resizerHeight = resizer.clientHeight;
-
+			    
               // constrain the container inside the viewport's dimensions
               if (height < 0) {
                 height = 0;
@@ -19099,7 +19100,7 @@
             observers = [
               observer(doc, "mousemove", function(evt) {
                 if (resizingLog) {
-                  setContainerHeight(view.innerHeight - evt.clientY);
+                  setContainerHeight(resizer.clientHeight - evt.clientY);
                   output.scrollTop = previousScrollTop;
                 }
               }),
@@ -19112,8 +19113,8 @@
 
               observer(resizer, "dblclick", function(evt) {
                 if ( evt.preventDefault ) { 
-                  evt.preventDefault(); 
-                } else { evt.returnValue = false; }
+				  evt.preventDefault(); 
+				} else { evt.returnValue = false; }
 
                 if (previousHeight) {
                   setContainerHeight(previousHeight);
@@ -19126,8 +19127,8 @@
 
               observer(resizer, "mousedown", function(evt) {
                 if ( evt.preventDefault ) { 
-                  evt.preventDefault(); 
-                } else { evt.returnValue = false; }
+				  evt.preventDefault(); 
+				} else { evt.returnValue = false; }
                 resizingLog = True;
                 previousScrollTop = output.scrollTop;
               }),
@@ -19431,11 +19432,11 @@
         }
         if (loaded === sourcesCount) {
           if (errors.length === 0) {
-            try {
+           // try {
               return new Processing(canvas, code.join("\n"));
-            } catch(e) {
-              Processing.logger.log("Unable to execute pjs sketch: " + e);
-            }
+            //} catch(e) {
+             // Processing.logger.log("Unable to execute pjs sketch: " + e);
+            //}
           } else {
             Processing.logger.log("Unable to load pjs sketch files: " + errors.join("\n"));
           }
