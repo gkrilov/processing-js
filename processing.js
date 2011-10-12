@@ -1213,9 +1213,9 @@
       try { Object.defineProperty(obj, name, desc); }
       catch(e) {
         if (desc.hasOwnProperty("get")) {
-	      obj.__defineGetter__(name, desc.get);
+        obj.__defineGetter__(name, desc.get);
 	    }
-	    if (desc.hasOwnProperty("set")) {
+        if (desc.hasOwnProperty("set")) {
 	      obj.__defineSetter__(name, desc.set);
 	    }
 	  }  
@@ -11240,7 +11240,7 @@
      * @see #size()
      */
     DrawingShared.prototype.smooth = curElement.style.setProperty ? function() {
-        curElement.style.setProperty("image-rendering", "optimizeQuality", "important");
+      curElement.style.setProperty("image-rendering", "optimizeQuality", "important");
       } : function() {
 	    curElement.setAttribute("style" , "image-rendering: optimizeQuality !important");
 	  };
@@ -13499,7 +13499,7 @@
       if (canvasData === undef) {
         canvasData = {};
         canvasData.canvas = document.createElement("canvas");
-		initializeCanvasIfIE8(canvasData.canvas);
+        initializeCanvasIfIE8(canvasData.canvas);
         canvasData.context = canvasData.canvas.getContext('2d');
       }
 
@@ -15790,7 +15790,7 @@
       var i, linesCount = lines.length;
       if (textcanvas === undef) {
         textcanvas = document.createElement("canvas");
-		initializeCanvasIfIE8(textcanvas);
+        initializeCanvasIfIE8(textcanvas);
       }
 
       var textContext = textcanvas.getContext("2d");
@@ -16094,7 +16094,7 @@
       // handle case for 3d text
       if (textcanvas === undef) {
         textcanvas = document.createElement("canvas");
-		initializeCanvasIfIE8(textcanvas);
+        initializeCanvasIfIE8(textcanvas);
       }
       var oldContext = curContext;
       curContext = textcanvas.getContext("2d");
@@ -16795,11 +16795,11 @@
         attachEventHandler(curElement, "touchmove", function(t) {
           if (p.touchMove !== undef) {
             if ( r.preventDefault ) { 
-		      r.preventDefault(); 
-			} else { r.returnValue = false; } // Stop the viewport from scrolling
-            t = addTouchEventOffset(t);
-            p.touchMove(t);
-          }
+              r.preventDefault(); 
+            } else { r.returnValue = false; } // Stop the viewport from scrolling
+              t = addTouchEventOffset(t);
+              p.touchMove(t);
+            }
         });
 
         attachEventHandler(curElement, "touchend", function(t) {
@@ -17778,7 +17778,6 @@
     }
 
     function expandExpression(expr) {
-	  // console.log(expr);
       if(expr.charAt(0) === '(' || expr.charAt(0) === '[') {
         return expr.charAt(0) + expandExpression(expr.substring(1, expr.length - 1)) + expr.charAt(expr.length - 1);
       } else if(expr.charAt(0) === '{') {
@@ -18956,7 +18955,7 @@
     } else if (typeof document !== undef && !document.fake) {
       (function() {
         // DOM document
-        var doc = window.document,
+        var doc = document,
 
         $div = "div",
         $style = "style",
@@ -19433,11 +19432,11 @@
         }
         if (loaded === sourcesCount) {
           if (errors.length === 0) {
-           // try {
+            try {
               return new Processing(canvas, code.join("\n"));
-            //} catch(e) {
-             // Processing.logger.log("Unable to execute pjs sketch: " + e);
-            //}
+            } catch(e) {
+              Processing.logger.log("Unable to execute pjs sketch: " + e);
+            }
           } else {
             Processing.logger.log("Unable to load pjs sketch files: " + errors.join("\n"));
           }
@@ -19469,7 +19468,7 @@
 	  if (document.removeEventListener) {
         document.removeEventListener('DOMContentLoaded', init, false);
 	  }
-      else if (document.detachEvent) {
+	  else if (document.detachEvent) {
         document.detachEvent("onreadystatechange", init);
       }  
 
@@ -19562,7 +19561,7 @@
 //#if PARSER
     if (document.addEventListener) {
 		document.addEventListener('DOMContentLoaded', init, false);
-	}
+    }
     else if (document.attachEvent) {
       document.attachEvent("onreadystatechange", function () {  
         if (document.readyState == "complete") {  
