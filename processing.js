@@ -17228,7 +17228,7 @@
         if (render === PConstants.WEBGL) {
           p.toImageData = function() { // 3D
             var c = document.createElement("canvas");
-			initializeCanvasIfIE8(c);
+            initializeCanvasIfIE8(c);
             var ctx = c.getContext("2d");
             var obj = ctx.createImageData(this.width, this.height);
             var uBuff = new Uint8Array(this.width * this.height * 4);
@@ -19113,8 +19113,10 @@
 
               observer(resizer, "dblclick", function(evt) {
                 if ( evt.preventDefault ) { 
-				  evt.preventDefault(); 
-				} else { evt.returnValue = false; }
+                  evt.preventDefault(); 
+                } else { 
+                  evt.returnValue = false; 
+                }
 
                 if (previousHeight) {
                   setContainerHeight(previousHeight);
@@ -19127,8 +19129,10 @@
 
               observer(resizer, "mousedown", function(evt) {
                 if ( evt.preventDefault ) { 
-				  evt.preventDefault(); 
-				} else { evt.returnValue = false; }
+                  evt.preventDefault(); 
+                } else { 
+                  evt.returnValue = false; 
+                }
                 resizingLog = True;
                 previousScrollTop = output.scrollTop;
               }),
