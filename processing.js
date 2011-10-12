@@ -34,6 +34,7 @@
     }
   };  
   
+  
   // Typed Arrays: fallback to WebGL arrays or Native JS arrays if unavailable
   function setupTypedArray(name, fallback) {
     // Check if TypedArray exists, and use if so.
@@ -1209,16 +1210,15 @@
   ////////////////////////////////////////////////////////////////////////////
 
   defaultScope.defineProperty = function(obj, name, desc) {
-    if("defineProperty" in Object) {
-      Object.defineProperty(obj, name, desc); 
-    } else {
-      if (desc.hasOwnProperty("get")) {
-        obj.__defineGetter__(name, desc.get);
-      }
-      if (desc.hasOwnProperty("set")) {
-        obj.__defineSetter__(name, desc.set);
-      }
-    }
+      try { Object.defineProperty(obj, name, desc); }
+      catch(e) {
+        if (desc.hasOwnProperty("get")) {
+	      obj.__defineGetter__(name, desc.get);
+	    }
+	    if (desc.hasOwnProperty("set")) {
+	      obj.__defineSetter__(name, desc.set);
+	    }
+	  }  
   };
 
   function extendClass(subClass, baseClass) {
@@ -9616,6 +9616,7 @@
     Drawing2D.prototype.size = function(aWidth, aHeight, aMode) {
       if (curContext === undef) {
         // size() was called without p.init() default context, i.e. p.createGraphics()
+        initializeCanvasIfIE8(curElement);
         curContext = curElement.getContext("2d");
         userMatrixStack = new PMatrixStack();
         userReverseMatrixStack = new PMatrixStack();
@@ -19529,7 +19530,7 @@
             loadSketchFromSources(canvas, filenames);
             continue;
           }
-          source =  script.innerText || script.textContent;
+          source =  script.innerText || script.textContent || script.text;
           instance = new Processing(canvas, source);
         }
       }

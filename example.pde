@@ -11,7 +11,7 @@ void setup() {
 }
 
 void draw() {
-  background(#F0F0E0);
+  background(#FF9900);
   String textstring = "source example";
   float twidth = textWidth(textstring);
   text(textstring, (width-twidth)/2, height/2);
