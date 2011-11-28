@@ -4684,7 +4684,7 @@
      * @param {String} systemID  the system ID of the XML data where the element starts
      * @param {Integer }lineNr   the line in the XML data where the element starts
      */
-    var XMLElement = p.XMLElement = function() {
+    var XMLElement = p.XMLElement = function( fName, nspace, sysID, line ) {
       this.attributes = [];
       this.children   = [];
       this.fullName   = null;
@@ -4696,27 +4696,29 @@
       this.systemID   = "";
       this.type = "ELEMENT";
 
-      if (arguments.length === 4) {
-        this.fullName   = arguments[0] || "";
-        if (arguments[1]) {
-          this.name = arguments[1];
+      sysID ? this.systemID = sysID : "";
+      line ? this.lineNR = line : "";
+
+
+      //If either a valid line or sysID were provided set them accordingly and go through the first if loop
+      //and depending on whether fName and nspace were provided set things accordingly
+      if ( this.lineNr != "" || this.systemID != "" ) {
+        fName ? this.fullName = fName : "";
+        if ( nspace ) {
+          this.name = nspace;
+          this.namespace = nspace;
         } else {
           var index = this.fullName.indexOf(':');
-          if (index >= 0) {
-            this.name = this.fullName.substring(index + 1);
-          } else {
-            this.name = this.fullName;
-          }
+          index >= 0 ? this.name = this.fullName.substring(index+1) : this.name = this.fullName;
         }
-        this.namespace = arguments[1];
-        this.lineNr    = arguments[3];
-        this.systemID  = arguments[2];
       }
-      else if ((arguments.length === 2 && arguments[1].indexOf(".") > -1) ) {
-        // filename or svg xml element
-        this.parse(arguments[arguments.length -1]);
-      } else if (arguments.length === 1 && typeof arguments[0] === "string"){
-        this.parse(arguments[0]);
+      //If only fName and nspace were provided
+      else if ( fName && nspace && nspace.indexOf(".") > -1 ) {
+        this.parse(nspace);
+      }
+	  //if only fName was provided
+      else if ( typeof fName === "string" && !nspace ) {
+        this.parse(fName);
       }
     };
     /**
@@ -4820,11 +4822,9 @@
        * @param {String} systemID   the system ID of the XML data where the element starts
        * @param {int} lineNr    the line in the XML data where the element starts
        */
-      createElement: function () {
-        if (arguments.length === 2) {
-          return new XMLElement(arguments[0], arguments[1], null, null);
-        }
-        return new XMLElement(arguments[0], arguments[1], arguments[2], arguments[3]);
+      //Changed to explicit arguments
+      createElement: function (fName, nspace, sysID, line ) {
+        return new XMLElement(fName, nspace, sysID, line);
       },
       /**
        * @member XMLElement
@@ -4852,13 +4852,9 @@
        *
        * @return {boolean} true if the attribute exists
        */
-      hasAttribute: function () {
-        if (arguments.length === 1) {
-          return this.getAttribute(arguments[0]) !== null;
-        }
-        if (arguments.length === 2) {
-          return this.getAttribute(arguments[0],arguments[1]) !== null;
-        }
+      //Changed to explicit arguments
+      hasAttribute: function (fName, nspace) {
+        return this.getAttribute(fName,nspace) !== null;
       },
       /**
        * @member XMLElement
@@ -4919,53 +4915,40 @@
        * @member XMLElement
        * The getAttribute() function returns the value of an attribute
        *
-       * @param {String} name         the non-null full name of the attribute
-       * @param {String} namespace    the namespace URI, which may be null
+       * @param {String} fName        the non-null full name of the attribute
+       * @param {String} name    the namespace URI, which may be null
        * @param {String} defaultValue the default value of the attribute
        *
        * @return {String} the value, or defaultValue if the attribute does not exist
        */
-      getAttribute: function (){
+      //Changed to use explicit arguments
+      getAttribute: function (fName, nspace, defaultValue){
         var attribute;
-        if( arguments.length === 2 ){
-          attribute = this.findAttribute(arguments[0]);
-          if (attribute) {
-            return attribute.getValue();
-          }
-          return arguments[1];
-        } else if (arguments.length === 1) {
-          attribute = this.findAttribute(arguments[0]);
-          if (attribute) {
-            return attribute.getValue();
-          }
+        attribute = this.findAttribute(fName,nspace);
+        if (attribute) {
+          return attribute.getValue();
+        }
+        else if ( defaultValue ) {
+          return defaultValue
+        } else { 
           return null;
-        } else if (arguments.length === 3) {
-          attribute = this.findAttribute(arguments[0],arguments[1]);
-          if (attribute) {
-            return attribute.getValue();
-          }
-          return arguments[2];
         }
       },
       /**
        * @member XMLElement
        * The getStringAttribute() function returns the string attribute of the element
        * If the <b>defaultValue</b> parameter is used and the attribute doesn't exist, the <b>defaultValue</b> value is returned.
-       * When calling the function without the <b>defaultValue</b> parameter, if the attribute doesn't exist, the value 0 is returned.
+       * When calling the function without the <b>defaultValue</b> parameter, if the attribute doesn't exist, the value null is returned.
        *
-       * @param name         the name of the attribute
-       * @param defaultValue value returned if the attribute is not found
+       * @param {String} name         the name of the attribute
+       * @param {String} namespace    the namespace URI, which may be null
+       * @param {String} defaultValue value returned if the attribute is not found
        *
        * @return {String} the value, or defaultValue if the attribute does not exist
        */
-      getStringAttribute: function() {
-        if (arguments.length === 1) {
-          return this.getAttribute(arguments[0]);
-        }
-        if (arguments.length === 2){
-          return this.getAttribute(arguments[0], arguments[1]);
-        }
-        return this.getAttribute(arguments[0], arguments[1],arguments[2]);
+      //changed to use explicit arguments
+      getStringAttribute: function(fName,nspace,defaultValue) {
+        return this.getAttribute(fName,nspace,defaultValue);
       },
       /**
        * Processing 1.5 XML API wrapper for the generic String
@@ -4978,21 +4961,22 @@
        * @member XMLElement
        * The getFloatAttribute() function returns the float attribute of the element.
        * If the <b>defaultValue</b> parameter is used and the attribute doesn't exist, the <b>defaultValue</b> value is returned.
-       * When calling the function without the <b>defaultValue</b> parameter, if the attribute doesn't exist, the value 0 is returned.
+       * When calling the function without the <b>defaultValue</b> parameter, if the attribute doesn't exist, the value null is returned.
        *
-       * @param name         the name of the attribute
-       * @param defaultValue value returned if the attribute is not found
+       * @param {String} name         the name of the attribute
+       * @param {String} namespace    the namespace URI, which may be null
+       * @param {String} defaultValue value returned if the attribute is not found
        *
        * @return {float} the value, or defaultValue if the attribute does not exist
        */
-      getFloatAttribute: function() {
-        if (arguments.length === 1 ) {
-          return parseFloat(this.getAttribute(arguments[0], 0));
+      //changed to use explicit arguments
+      getFloatAttribute: function(fName,nspace,defaultValue) {
+        //If there is only one argument, the fName, then get the attribute associated with it and parseFloat it
+        if (fName && !nspace && !defaultValue ) {
+          return parseFloat(this.getAttribute(fName));
+        } else {
+          return this.getAttribute(fName,nspace,defaultValue);
         }
-        if (arguments.length === 2 ){
-          return this.getAttribute(arguments[0], arguments[1]);
-        }
-        return this.getAttribute(arguments[0], arguments[1],arguments[2]);
       },
       /**
        * Processing 1.5 XML API wrapper for the generic float
@@ -5012,14 +4996,9 @@
        *
        * @return {int} the value, or defaultValue if the attribute does not exist
        */
-      getIntAttribute: function () {
-        if (arguments.length === 1) {
-          return this.getAttribute( arguments[0], 0 );
-        }
-        if (arguments.length === 2) {
-          return this.getAttribute(arguments[0], arguments[1]);
-        }
-        return this.getAttribute(arguments[0], arguments[1],arguments[2]);
+	   //Changed to use explicit arguments
+      getIntAttribute: function (fName,nspace,defaultValue) {
+        return this.getAttribute(fName,nspace,defaultValue);
       },
       /**
        * Processing 1.5 XML API wrapper for the generic int
