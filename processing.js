@@ -633,6 +633,32 @@
         return false;
       };
 
+       /**
+       * @member ArrayList
+       * ArrayList.removeRange Removes from this List all of the elements whose index is between fromIndex and toIndex.
+       * Shifts any succeeding elements to the left (reduces their index). This call shortens the list by (toIndex - fromIndex) elements. 
+       * (If toIndex==fromIndex or fromIndex > toIndex (indexOutOfBounds), this operation has no effect.) 
+       *
+       * @param {int} The beginning of the ArrayList to start removal from
+       * @param {int} The index of the array where to removal until
+       *
+       * @returns {boolean} true if the operation is successful; false otherwise
+       */
+      this.removeRange = function(fromIndex, toIndex) {
+        //check that the from index is not the same as the toIndex
+        //and check that the fromIndex is not bigger then toIndex 
+        //creating an out of bounds index.
+        //Simply splice the array by toIndex-fromIndex amount
+        //starting at the fromIndex and return true if succesful.
+        if ( (fromIndex != toIndex) && (fromIndex < toIndex) ) {
+          var howMany = toIndex-fromIndex;
+          array.splice(fromIndex,howMany);
+          return true;
+        } else {
+         return false;
+        }
+      }
+
       /**
        * @member ArrayList
        * ArrayList.isEmpty() Tests if this list has no elements.
