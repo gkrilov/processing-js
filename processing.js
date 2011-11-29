@@ -648,13 +648,13 @@
        //and resulting in a unique array
       this.removeAll = function(c) {
         var i, x=0;
-        //Create a copy of this array
+        //Create a copy of the 'this' array
         var newList = new ArrayList();
         newList.addAll(this);
         //Clear the originl ArrayList to make room for the coming new possibly changed one
         this.clear();
         //For every item that exists in the original ArrayList and not in the c ArrayList
-        //copy it into the empty this ArrayList to create the new this Array.
+        //copy it into the empty 'this' ArrayList to create the new this Array.
         for ( i = 0; i < newList.size(); i++ ) {
           if ( !c.contains(newList.get(i))) {
             this.add(x++, newList.get(i));
