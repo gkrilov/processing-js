@@ -650,8 +650,7 @@
           array.splice(fromIndex, howMany);
           return true;
         } 
-         return false;
-        
+        return false;
       };
 
       /**
