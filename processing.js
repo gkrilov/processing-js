@@ -656,7 +656,7 @@
         //For every item that exists in the original ArrayList and not in the c ArrayList
         //copy it into the empty 'this' ArrayList to create the new this Array.
         for ( i = 0; i < newList.size(); i++ ) {
-          if ( !c.contains(newList.get(i))) {
+          if ( !c.contains(newList.get(i)) ) {
             this.add(x++, newList.get(i));
           }
         }
