@@ -3025,10 +3025,10 @@
        * @member PShape
        * The drawPrimitive() function draws SVG document shape elements. These can be point, line, triangle, quad, rect, ellipse, arc, box, or sphere.
        */
-      drawPrimitive: function() {
+      drawPrimitive: function() {     
         if (this.kind === PConstants.POINT) {
           p.point(this.params[0], this.params[1]);
-        } else if (this.kind === PConstants.LINE) {
+        } else if (this.kind === PConstants.LINE) {	
           if (this.params.length === 4) {  // 2D
             p.line(this.params[0], this.params[1],
                    this.params[2], this.params[3]);
@@ -4544,7 +4544,12 @@
               p.translate(x, y);
             }
           }
+
           shape.draw();
+          //set them back to what they were before
+          curRectMode = rcMode;
+          curEllipseMode = elMode;
+
           if ((arguments.length === 1 && curShapeMode === PConstants.CENTER ) || arguments.length > 1) {
             p.popMatrix();
           }
@@ -13251,6 +13256,7 @@
     */
     p.rectMode = function(aRectMode) {
       curRectMode = aRectMode;
+      rcMode = curRectMode;
     };
 
     /**
@@ -13298,6 +13304,10 @@
     */
     p.ellipseMode = function(aEllipseMode) {
       curEllipseMode = aEllipseMode;
+      //only set this it does not exist yet for the ellipse
+      if ( typeof elMode === 'undefined' ){
+        elMode = curEllipseMode; 
+      }
     };
 
     /**
