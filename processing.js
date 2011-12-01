@@ -643,25 +643,18 @@
        *
        * @returns {boolean} true if the ArrayList had an element removed; false otherwise
        */
-       //This is a f(n) and fast because this does not use any remove operations, instead it simply copies unique items from 
-       //the ArrayList identified by the keyword this into itself, removing everything present in both ArrayList c and "this"
-       //and resulting in a unique array
       this.removeAll = function(c) {
-        var i, x=0;
-        //Create a copy of the 'this' array
+        var i, x;
         var newList = new ArrayList();
         newList.addAll(this);
-        //Clear the originl ArrayList to make room for the coming new possibly changed one
         this.clear();
         //For every item that exists in the original ArrayList and not in the c ArrayList
-        //copy it into the empty 'this' ArrayList to create the new this Array.
-        for (i = 0; i < newList.size(); i++) {
+        //copy it into the empty 'this' ArrayList to create the new 'this' Array.
+        for (i = 0, x=0; i < newList.size(); i++) {
           if (!c.contains(newList.get(i))) {
             this.add(x++, newList.get(i));
           }
         }
-        //if the this array had items removed its size will be less
-        //than its original state and we return true to say that it has been changed
         if (this.size() < newList.size()) {
           return true;
         } 
