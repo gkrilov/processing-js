@@ -645,7 +645,7 @@
        * @returns {boolean} true if the operation is successful; false otherwise
        */
       this.removeRange = function(fromIndex, toIndex) {
-        if ( (fromIndex !== toIndex) && (fromIndex < toIndex) ) {
+        if ((fromIndex !== toIndex) && (fromIndex < toIndex)) {
           var howMany = toIndex - fromIndex;
           array.splice(fromIndex, howMany);
           return true;
