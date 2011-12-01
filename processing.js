@@ -4698,7 +4698,7 @@
 
       //If either a valid line or sysID were provided set them accordingly and go through the first if loop
       //and depending on whether fName and nspace were provided set things accordingly
-      if ( line !== 'undefined' || sysID !== 'undefined' ) {
+      if ( line !== undefined || sysID !== undefined ) {
         if (fName) {
           this.fullName = fName;
         } else {
