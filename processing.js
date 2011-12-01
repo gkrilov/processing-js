@@ -1213,12 +1213,12 @@
       try { Object.defineProperty(obj, name, desc); }
       catch(e) {
         if (desc.hasOwnProperty("get")) {
-        obj.__defineGetter__(name, desc.get);
-	    }
+          obj.__defineGetter__(name, desc.get);
+        }
         if (desc.hasOwnProperty("set")) {
-	      obj.__defineSetter__(name, desc.set);
-	    }
-	  }  
+          obj.__defineSetter__(name, desc.set);
+        }
+      }  
   };
 
   function extendClass(subClass, baseClass) {
@@ -1487,8 +1487,8 @@
     var pgraphicsMode = (arguments.length === 0);
     if (pgraphicsMode) {
       curElement = document.createElement("canvas");
-	  initializeCanvasIfIE8(curElement);
-	  }
+      initializeCanvasIfIE8(curElement);
+    }
 
     // PJS specific (non-p5) methods and properties to externalize
     p.externals = {
@@ -11242,8 +11242,8 @@
     DrawingShared.prototype.smooth = curElement.style.setProperty ? function() {
       curElement.style.setProperty("image-rendering", "optimizeQuality", "important");
       } : function() {
-	    curElement.setAttribute("style" , "image-rendering: optimizeQuality !important");
-	  };
+        curElement.setAttribute("style" , "image-rendering: optimizeQuality !important");
+      };
 
     Drawing2D.prototype.smooth = function() {
       DrawingShared.prototype.smooth.apply(this, arguments);
@@ -11260,8 +11260,8 @@
     DrawingShared.prototype.noSmooth = curElement.style.setProperty ? function() {
       curElement.style.setProperty("image-rendering", "optimizeSpeed", "important");
     } : function() {
-	  curElement.setAttribute("style" , "image-rendering optimizeSpeed !important");
-	};
+      curElement.setAttribute("style" , "image-rendering optimizeSpeed !important");
+    };
 
     Drawing2D.prototype.noSmooth = function() {
       DrawingShared.prototype.noSmooth.apply(this, arguments);
@@ -13487,8 +13487,8 @@
       p.save(frameFilename);
     };
 
-	var jCanvas = document.createElement("canvas");
-    initializeCanvasIfIE8(jCanvas);	
+    var jCanvas = document.createElement("canvas");
+    initializeCanvasIfIE8(jCanvas);
     var utilityContext2d = jCanvas.getContext("2d");
 
     var canvasDataCache = [undef, undef, undef]; // we need three for now
@@ -19085,7 +19085,7 @@
             setContainerHeight = function(height) {
               var viewHeight = view.innerHeight,
                 resizerHeight = resizer.clientHeight;
-			    
+   
               // constrain the container inside the viewport's dimensions
               if (height < 0) {
                 height = 0;
@@ -19469,10 +19469,10 @@
    * Automatic initialization function.
    */
   var init = function() {
-	  if (document.removeEventListener) {
+      if (document.removeEventListener) {
         document.removeEventListener('DOMContentLoaded', init, false);
-	  }
-	  else if (document.detachEvent) {
+      }
+      else if (document.detachEvent) {
         document.detachEvent("onreadystatechange", init);
       }  
 
@@ -19550,9 +19550,9 @@
    */
   Processing.disableInit = function() {
     if(isDOMPresent) {
-	  if (document.removeEventListener) {
+      if (document.removeEventListener) {
         document.removeEventListener('DOMContentLoaded', init, false);
-	  }
+      }
       else if (document.detachEvent) {
         document.detachEvent("onreadystatechange", init);
       }  
@@ -19564,7 +19564,7 @@
     window['Processing'] = Processing;
 //#if PARSER
     if (document.addEventListener) {
-		document.addEventListener('DOMContentLoaded', init, false);
+      document.addEventListener('DOMContentLoaded', init, false);
     }
     else if (document.attachEvent) {
       document.attachEvent("onreadystatechange", function () {  
