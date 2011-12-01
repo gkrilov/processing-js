@@ -655,18 +655,18 @@
         this.clear();
         //For every item that exists in the original ArrayList and not in the c ArrayList
         //copy it into the empty 'this' ArrayList to create the new this Array.
-        for ( i = 0; i < newList.size(); i++ ) {
-          if ( !c.contains(newList.get(i)) ) {
+        for (i = 0; i < newList.size(); i++) {
+          if (!c.contains(newList.get(i))) {
             this.add(x++, newList.get(i));
           }
         }
         //if the this array had items removed its size will be less
         //than its original state and we return true to say that it has been changed
-        if ( this.size() < newList.size() ) {
+        if (this.size() < newList.size()) {
           return true;
         } 
         return false;
-      }
+      };
 
       /**
        * @member ArrayList
