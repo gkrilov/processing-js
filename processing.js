@@ -4696,27 +4696,33 @@
       this.systemID   = "";
       this.type = "ELEMENT";
 
-      sysID ? this.systemID = sysID : "";
-      line ? this.lineNR = line : "";
-
-
       //If either a valid line or sysID were provided set them accordingly and go through the first if loop
       //and depending on whether fName and nspace were provided set things accordingly
-      if ( this.lineNr != "" || this.systemID != "" ) {
-        fName ? this.fullName = fName : "";
-        if ( nspace ) {
+      if ( line !== 'undefined' || sysID !== 'undefined' ) {
+        if (fName) {
+          this.fullName = fName;
+        } else {
+          this.fullName = "";
+        }
+        if (nspace) {
           this.name = nspace;
           this.namespace = nspace;
         } else {
           var index = this.fullName.indexOf(':');
-          index >= 0 ? this.name = this.fullName.substring(index+1) : this.name = this.fullName;
+          if (index >= 0) {
+            this.name = this.fullName.substring(index+1);
+          } else {
+            this.name = this.fullName;
+          }
         }
+        this.lineNR = line;
+        this.systemID = sysID;
       }
       //If only fName and nspace were provided
       else if ( fName && nspace && nspace.indexOf(".") > -1 ) {
         this.parse(nspace);
       }
-	  //if only fName was provided
+      //if only fName was provided
       else if ( typeof fName === "string" && !nspace ) {
         this.parse(fName);
       }
@@ -4929,7 +4935,7 @@
           return attribute.getValue();
         }
         else if ( defaultValue ) {
-          return defaultValue
+          return defaultValue;
         } else { 
           return null;
         }
@@ -4996,7 +5002,7 @@
        *
        * @return {int} the value, or defaultValue if the attribute does not exist
        */
-	   //Changed to use explicit arguments
+      //Changed to use explicit arguments
       getIntAttribute: function (fName,nspace,defaultValue) {
         return this.getAttribute(fName,nspace,defaultValue);
       },
