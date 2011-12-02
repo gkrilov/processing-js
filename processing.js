@@ -4719,11 +4719,11 @@
         this.systemID = sysID;
       }
       //If only fName and nspace were provided
-      else if ( fName && nspace && nspace.indexOf(".") > -1 ) {
+      else if ( fName !== undefined && nspace !== undefined && nspace.indexOf(".") > -1 ) {
         this.parse(nspace);
       }
       //if only fName was provided
-      else if ( typeof fName === "string" && !nspace ) {
+      else if ( typeof fName === "string" && nspace == undefined ) {
         this.parse(fName);
       }
     };
