@@ -4684,7 +4684,7 @@
      * @param {String} systemID  the system ID of the XML data where the element starts
      * @param {Integer }lineNr   the line in the XML data where the element starts
      */
-    var XMLElement = p.XMLElement = function( fullname, namespaceURI, sysID, line ) {
+    var XMLElement = p.XMLElement = function (fullname, namespaceURI, sysID, line) {
       this.attributes = [];
       this.children   = [];
       this.fullName   = null;
@@ -4696,31 +4696,24 @@
       this.systemID   = "";
       this.type = "ELEMENT";
 
-      //If either a valid line or sysID were provided set them accordingly and go through the first if loop
-      //and depending on whether fullname and namespaceURIwere provided set things accordingly
-      if ( line !== undefined || sysID !== undefined ) {
-        this.fullName = fullname || "";
-        if (namespaceURI) {
-          this.name = namespaceURI;
-          this.namespace = namespaceURI;
-        } else {
-          var index = this.fullName.indexOf(':');
-          if (index >= 0) {
-            this.name = this.fullName.substring(index+1);
+	  
+	  if (fullname !== undef) {
+        if (typeof fullname === "string") {
+          if (namespaceURI === undef && fullname.indexOf("<")>-1) {
+            // load XML from text string (illegal use, see ticket ...)
+            this.parse(fullname);
           } else {
-            this.name = this.fullName;
+            // XMLElement(fullname, namespace, sysid, line) format
+            this.fullName = fullname;
+            this.namespace = namespaceURI;
+            this.systemId = sysID;
+            this.lineNr = line;
           }
-        }
-        this.lineNR = line;
-        this.systemID = sysID;
+        }  
       }
-      //If only fullname and namespaceURIwere provided
-      else if ( fullname !== undefined && namespaceURI!== undefined && namespaceURI.indexOf(".") > -1 ) {
+      else if (namespaceURI !== undef && namespaceURI.indexOf(".")>-1){
+        // XMLElement(<PApplet reference>,fileuri) format
         this.parse(namespaceURI);
-      }
-      //if only fullname was provided
-      else if ( typeof fullname === "string" && namespaceURI== undefined ) {
-        this.parse(fullname);
       }
     };
     /**
@@ -4974,7 +4967,7 @@
       //changed to use explicit arguments
       getFloatAttribute: function(fullname,namespaceURI,defaultValue) {
         //If there is only one argument, the fullname, then get the attribute associated with it and parseFloat it
-        if (fullname && namespaceURI == undefined && defaultValue == undefined) {
+        if (fullname && namespaceURI === undef && defaultValue == undef) {
           return parseFloat(this.getAttribute(fullname));
         } else {
           return this.getAttribute(fullname,namespaceURI,defaultValue);
