@@ -4696,11 +4696,11 @@
       this.systemID   = "";
       this.type = "ELEMENT";
 
-	  
-	  if (fullname !== undef) {
+  
+      if (fullname !== undef) {
         if (typeof fullname === "string") {
           if (namespaceURI === undef && fullname.indexOf("<")>-1) {
-            // load XML from text string (illegal use, see ticket ...)
+            // load XML from text string (illegal use, see ticket 1774)
             this.parse(fullname);
           } else {
             // XMLElement(fullname, namespace, sysid, line) format
