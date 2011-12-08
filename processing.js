@@ -2320,14 +2320,11 @@
     // Objects for shared, 2D and 3D contexts
     var DrawingShared = function() {};
     var Drawing2D = function() {};
-    var Drawing3D = function() {};
     var DrawingPre = function() {};
 
     // Setup the prototype chain
     Drawing2D.prototype = new DrawingShared();
     Drawing2D.prototype.constructor = Drawing2D;
-    Drawing3D.prototype = new DrawingShared();
-    Drawing3D.prototype.constructor = Drawing3D;
     DrawingPre.prototype = new DrawingShared();
     DrawingPre.prototype.constructor = DrawingPre;
 
