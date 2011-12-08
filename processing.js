@@ -644,13 +644,13 @@
        * @returns {boolean} true if the ArrayList had an element removed; false otherwise
        */
       this.removeAll = function(c) {
-        var i, x;
-        var newList = new ArrayList();
+        var i, x,
+            newList = new ArrayList();
         newList.addAll(this);
         this.clear();
-        //For every item that exists in the original ArrayList and not in the c ArrayList
-        //copy it into the empty 'this' ArrayList to create the new 'this' Array.
-        for (i = 0, x=0; i < newList.size(); i++) {
+        // For every item that exists in the original ArrayList and not in the c ArrayList
+        // copy it into the empty 'this' ArrayList to create the new 'this' Array.
+        for (i = 0, x = 0; i < newList.size(); i++) {
           if (!c.contains(newList.get(i))) {
             this.add(x++, newList.get(i));
           }
