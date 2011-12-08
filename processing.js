@@ -4706,7 +4706,7 @@
             // XMLElement(selector, namespace, sysid, line) format
             this.fullName = selector;
             this.namespace = namespaceURI;
-			this.name = namespaceURI;
+            this.name = namespaceURI;
             this.systemId = sysID;
             this.lineNr = line;
           }
