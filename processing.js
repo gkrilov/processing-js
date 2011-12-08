@@ -4684,7 +4684,7 @@
      * @param {String} systemID  the system ID of the XML data where the element starts
      * @param {Integer }lineNr   the line in the XML data where the element starts
      */
-    var XMLElement = p.XMLElement = function (fullname, namespaceURI, sysID, line) {
+    var XMLElement = p.XMLElement = function (selector, namespaceURI, sysID, line) {
       this.attributes = [];
       this.children   = [];
       this.fullName   = null;
@@ -4697,21 +4697,22 @@
       this.type = "ELEMENT";
 
   
-      if (fullname !== undef) {
-        if (typeof fullname === "string") {
-          if (namespaceURI === undef && fullname.indexOf("<")>-1) {
+      if (selector) {
+        if (typeof selector === "string") {
+          if (namespaceURI === undef && selector.indexOf("<")>-1) {
             // load XML from text string (illegal use, see ticket 1774)
-            this.parse(fullname);
+            this.parse(selector);
           } else {
-            // XMLElement(fullname, namespace, sysid, line) format
-            this.fullName = fullname;
+            // XMLElement(selector, namespace, sysid, line) format
+            this.fullName = selector;
             this.namespace = namespaceURI;
+			this.name = namespaceURI;
             this.systemId = sysID;
             this.lineNr = line;
           }
         }  
       }
-      else if (namespaceURI !== undef && namespaceURI.indexOf(".")>-1){
+      else if (namespaceURI && namespaceURI.indexOf(".")>-1){
         // XMLElement(<PApplet reference>,fileuri) format
         this.parse(namespaceURI);
       }
@@ -4967,7 +4968,7 @@
       //changed to use explicit arguments
       getFloatAttribute: function(fullname,namespaceURI,defaultValue) {
         //If there is only one argument, the fullname, then get the attribute associated with it and parseFloat it
-        if (fullname && namespaceURI === undef && defaultValue == undef) {
+        if (fullname && namespaceURI === undef && defaultValue === undef) {
           return parseFloat(this.getAttribute(fullname));
         } else {
           return this.getAttribute(fullname,namespaceURI,defaultValue);
