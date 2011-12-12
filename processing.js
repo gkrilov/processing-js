@@ -12316,16 +12316,16 @@
       // or setPixels(), .length becomes getLength()
       this.pixels = {
         getLength: function() {
-          throw("3D functionality is not supported in IE8");
+          throw("Pixel-setting and getting functions are not available in this release of Processing.js");
         },
         getPixel: function() {
-          throw("3D functionality is not supported in IE8");
+          throw("Pixel-setting and getting functions are not available in this release of Processing.js");
         },
         setPixel: function() {
-          throw("3D functionality is not supported in IE8");
+          throw("Pixel-setting and getting functions are not available in this release of Processing.js");
         },
         set: function() {
-          throw("3D functionality is not supported in IE8");
+          throw("Pixel-setting and getting functions are not available in this release of Processing.js");
         }
       };
 
@@ -12340,7 +12340,7 @@
       * this function in the current Processing release, this will always be subject to change.
       */
       this.loadPixels = function() {
-        throw("3D functionality is not supported in IE8");
+        throw("Pixel-setting and getting functions are not available in this release of Processing.js");
       };
 
       /**
@@ -12354,7 +12354,7 @@
       * Currently, none of the renderers use the additional parameters to updatePixels().
       */
       this.updatePixels = function() {
-        throw("3D functionality is not supported in IE8");
+        throw("Pixel-setting and getting functions are not available in this release of Processing.js");
       };
 
       this.toImageData = function() {
@@ -12796,10 +12796,10 @@
     * @see PImage
     */
     p.pixels = {
-      getLength: function() { throw("3D functionality is not supported in IE8"); },
-      getPixel: function() { throw("3D functionality is not supported in IE8"); },
-      setPixel: function() { throw("3D functionality is not supported in IE8"); },
-      set: function() { throw("3D functionality is not supported in IE8"); }
+      getLength: function() { throw("Pixel-setting and getting functions are not available in this release of Processing.js"); },
+      getPixel: function() { throw("Pixel-setting and getting functions are not available in this release of Processing.js"); },
+      setPixel: function() { throw("Pixel-setting and getting functions are not available in this release of Processing.js"); },
+      set: function() { throw("Pixel-setting and getting functions are not available in this release of Processing.js"); }
     };
 
     // Gets a 1-Dimensional pixel array from Canvas
@@ -12815,7 +12815,7 @@
     * @see updatePixels
     */
     p.loadPixels = function() {
-      throw("3D functionality is not supported in IE8");
+      throw("Pixel-setting and getting functions are not available in this release of Processing.js");
     };
 
     // Draws a 1-Dimensional pixel array to Canvas
@@ -12833,7 +12833,7 @@
     * @see pixels[]
     */
     p.updatePixels = function() {
-      throw("3D functionality is not supported in IE8");
+      throw("Pixel-setting and getting functions are not available in this release of Processing.js");
     };
 
     /**
