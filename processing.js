@@ -26,6 +26,13 @@
   };
 
   var isDOMPresent = ("document" in this) && !("fake" in this.document);
+  
+  // Check if browser is IE8 and if call initElement on the dynamically created canvas.
+  var initializeCanvasIfIE8 = function(canvas) {
+    if ( !document.createElement('canvas').getContext && typeof(G_vmlCanvasManager) != "undefined" ) {
+      G_vmlCanvasManager.initElement(canvas);
+    }
+  };  
 
   // document.head polyfill for the benefit of Firefox 3.6
   document.head = document.head || document.getElementsByTagName('head')[0];
@@ -1578,7 +1585,8 @@
   function computeFontMetrics(pfont) {
     var emQuad = 250,
         correctionFactor = pfont.size / emQuad,
-        canvas = document.createElement("canvas");
+        canvas = document.createElement("canvas");	
+    initializeCanvasIfIE8(canvas);
     canvas.width = 2*emQuad;
     canvas.height = 2*emQuad;
     canvas.style.opacity = 0;
@@ -1899,6 +1907,7 @@
 
     if (pgraphicsMode) {
       curElement = document.createElement("canvas");
+      initializeCanvasIfIE8(curElement);
     } else {
       // We'll take a canvas element or a string for a canvas element's id
       curElement = typeof aCanvas === "string" ? document.getElementById(aCanvas) : aCanvas;
@@ -8435,8 +8444,9 @@
       y = y !== undef ? y : 0;
       w = w !== undef ? w : p.width;
       h = h !== undef ? h : p.height;
-      var c = document.createElement("canvas"),
-          ctx = c.getContext("2d"),
+      var c = document.createElement("canvas");
+      initializeCanvasIfIE8(c);
+      var ctx = c.getContext("2d"),
           obj = ctx.createImageData(w, h),
           uBuff = new Uint8Array(w * h * 4);
       curContext.readPixels(x, y, w, h, curContext.RGBA, curContext.UNSIGNED_BYTE, uBuff);
@@ -11837,39 +11847,49 @@
      * @see #size()
      */
 
-    Drawing2D.prototype.smooth = function() {
-      renderSmooth = true;
-      var style = curElement.style;
-      style.setProperty("image-rendering", "optimizeQuality", "important");
-      style.setProperty("-ms-interpolation-mode", "bicubic", "important");
-      if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
-        curContext.mozImageSmoothingEnabled = true;
-      }
+    Drawing2D.prototype.smooth = curElement.style.setProperty ? function() {
+       renderSmooth = true;
+       curElement.style.setProperty("image-rendering", "optimizeQuality", "important");
+       curElement.style.setProperty("-ms-interpolation-mode", "bicubic", "important");
+       if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
+       curContext.mozImageSmoothingEnabled = true;
+       }
+    } : function() {
+       renderSmooth = true;
+       curElement.setAttribute("style" , "image-rendering: optimizeQuality !important");
+       curElement.setAttribute("style" , "-ms-interpolation-mode bicubic important");
+       if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
+         curContext.mozImageSmoothingEnabled = true;
+       }
     };
-
     Drawing3D.prototype.smooth = nop;
-
     /**
      * The noSmooth() function draws all geometry with jagged (aliased) edges.
      *
      * @see #smooth()
      */
-
-    Drawing2D.prototype.noSmooth = function() {
-      renderSmooth = false;
-      var style = curElement.style;
-      style.setProperty("image-rendering", "optimizeSpeed", "important");
-      style.setProperty("image-rendering", "-moz-crisp-edges", "important");
-      style.setProperty("image-rendering", "-webkit-optimize-contrast", "important");
-      style.setProperty("image-rendering", "optimize-contrast", "important");
-      style.setProperty("-ms-interpolation-mode", "nearest-neighbor", "important");
-      if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
-        curContext.mozImageSmoothingEnabled = false;
-      }
+    Drawing2D.prototype.noSmooth = curElement.style.setProperty ? function() {
+       renderSmooth = false;
+       curElement.style.setProperty("image-rendering", "optimizeSpeed", "important");
+       curElement.style.setProperty("image-rendering", "-moz-crisp-edges", "important");
+       curElement.style.setProperty("image-rendering", "-webkit-optimize-contrast", "important");
+       curElement.style.setProperty("image-rendering", "optimize-contrast", "important");
+       curElement.style.setProperty("-ms-interpolation-mode", "nearest-neighbor", "important");
+       if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
+         curContext.mozImageSmoothingEnabled = false;
+       }
+    } : function() {
+       renderSmooth = false;
+       curElement.setAttribute("style" , "image-rendering optimizeSpeed !important");
+       curElement.setAttribute("style" , "image-rendering -moz-crisp-edges !important");
+       curElement.setAttribute("style" , "image-rendering -webkit-optimize-contrast !important");
+       curElement.setAttribute("style" , "image-rendering optimize-contrast !important");
+       curElement.setAttribute("style" , "-ms-interpolation-mode nearest-neighbor !important");
+       if (curContext.hasOwnProperty("mozImageSmoothingEnabled")) {
+         curContext.mozImageSmoothingEnabled = false;
+       }
     };
-
     Drawing3D.prototype.noSmooth = nop;
-
     ////////////////////////////////////////////////////////////////////////////
     // Vector drawing functions
     ////////////////////////////////////////////////////////////////////////////
@@ -14105,7 +14125,9 @@
       p.save(frameFilename);
     };
 
-    var utilityContext2d = document.createElement("canvas").getContext("2d");
+	var aCanvas = document.createElement("canvas");
+    initializeCanvasIfIE8(aCanvas);
+    var utilityContext2d = aCanvas.getContext("2d");
 
     var canvasDataCache = [undef, undef, undef]; // we need three for now
 
@@ -14115,6 +14137,7 @@
       if (canvasData === undef) {
         canvasData = {};
         canvasData.canvas = document.createElement("canvas");
+        initializeCanvasIfIE8(canvasData.canvas);
         canvasData.context = canvasData.canvas.getContext('2d');
       }
 
@@ -14267,6 +14290,7 @@
 
         // Stuff a canvas into sourceImg so image() calls can use drawImage like an <img>
         var canvas = this.sourceImg = document.createElement("canvas");
+        initializeCanvasIfIE8(canvas);
         canvas.width = this.width;
         canvas.height = this.height;
 
@@ -16284,6 +16308,7 @@
       var i, linesCount = lines.length;
       if (textcanvas === undef) {
         textcanvas = document.createElement("canvas");
+        initializeCanvasIfIE8(textcanvas);
       }
 
       var textContext = textcanvas.getContext("2d");
@@ -16456,6 +16481,7 @@
       // handle case for 3d text
       if (textcanvas === undef) {
         textcanvas = document.createElement("canvas");
+        initializeCanvasIfIE8(textcanvas);
       }
       var oldContext = curContext;
       curContext = textcanvas.getContext("2d");
@@ -19743,8 +19769,13 @@
    * Automatic initialization function.
    */
   var init = function() {
-    document.removeEventListener('DOMContentLoaded', init, false);
-
+  
+    if (document.removeEventListener) {
+	  document.removeEventListener('DOMContentLoaded', init, false);
+	}
+	else {
+	  document.detachEvent("onreadystatechange", init);
+	}
     var canvas = document.getElementsByTagName('canvas'),
       filenames;
 
@@ -19819,7 +19850,12 @@
    */
   Processing.disableInit = function() {
     if(isDOMPresent) {
-      document.removeEventListener('DOMContentLoaded', init, false);
+	  if (document.removeEventListener) {
+        document.removeEventListener('DOMContentLoaded', init, false);
+	  }
+      else if (document.detachEvent) {
+        document.detachEvent("onreadystatechange", init);
+      }  
     }
   };
 //#endif
@@ -19827,7 +19863,16 @@
   if(isDOMPresent) {
     window['Processing'] = Processing;
 //#if PARSER
-    document.addEventListener('DOMContentLoaded', init, false);
+    if (document.addEventListener) {
+		document.addEventListener('DOMContentLoaded', init, false);
+	}
+    else if (document.attachEvent) {
+      document.attachEvent("onreadystatechange", function () {  
+        if (document.readyState == "complete") {  
+          init();  
+        }  
+      });  
+    }
 //#endif
   } else {
     // DOM is not found
