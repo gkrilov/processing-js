@@ -652,7 +652,7 @@
        */
       this.removeAll = function(c) {
         var i, x, item,
-                  newList = new ArrayList();
+            newList = new ArrayList();
         newList.addAll(this);
         this.clear();
         // For every item that exists in the original ArrayList and not in the c ArrayList
